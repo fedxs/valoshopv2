@@ -27,11 +27,19 @@ class ValorantAPI:
 
     def store_fetch_offers(self) -> dict:
         data = self.fetch("/store/v2/storefront/{user_id}".format(user_id=self.user_id))
-        return data["SkinsPanelLayout"]["SingleItemOffers"]["BonusStore"]
+        return data["SkinsPanelLayout"]["SingleItemOffers"]
     
     def store_fetch_price(self) -> dict:
         data = self.fetch('/store/v1/offers/')
-        return data['Offers']["BonusStoreOffers"]
+        return data['Offers']
+    
+    def store_night_offers(self) -> dict:
+        data = self.fetch("/store/v2/storefront/{user_id}".format(user_id=self.user_id))
+        return data["BonusStore"]
+    
+    def store_night_price(self) -> dict:
+        data = self.fetch('/store/v1/offers/')
+        return data['DiscountCosts']
 
     def my_daily_offter(self) -> None:
         skinid = self.store_fetch_offers()
@@ -59,6 +67,34 @@ class ValorantAPI:
         if user.avatar is not None:
             embed.set_footer(text=f'Requested by {user.display_name}', icon_url=user.avatar)
         return embed
+    
+    def my_night_offter(self) -> None:
+        skinid = self.store_night_offers()
+        get_price = self.store_night_price()
+        skin = []
+        icon = []
+        price = []
+        for i in skinid:
+            response = self.session.get(
+                f"https://valorant-api.com/v1/weapons/skinlevels/{i}")
+            api = response.json()
+            skin.append(api['data']['displayName'])
+            icon.append(api['data']['displayIcon'])
+            for x in get_price:
+                if x['BonusOfferID'] == i:
+                    price.append(str(*x['Cost'].values()))
+
+        return skin, icon, price
+
+    def build_embed(self) -> discord.Embed:
+        user = self.interaction.user
+        embed = discord.Embed(title=f'Valorant Store', color=0xfe676e, timestamp=discord.utils.utcnow()) #0x2F3136
+        embed.set_image(url='attachment://store-offers.png')        
+        embed.set_footer(text=f'Requested by {user.display_name}')
+        if user.avatar is not None:
+            embed.set_footer(text=f'Requested by {user.display_name}', icon_url=user.avatar)
+        return embed
+
 
     async def get_authenticate(self, auth):        
         try:
