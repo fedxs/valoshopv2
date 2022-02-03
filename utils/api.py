@@ -27,7 +27,7 @@ class ValorantAPI:
 
     def store_fetch_offers(self) -> dict:
         data = self.fetch("/store/v2/storefront/{user_id}".format(user_id=self.user_id))
-        return data["SkinsPanelLayout"]["SingleItemOffers"]
+        return data["SkinsPanelLayout"]["SingleItemOffers"]["BonusStoreOffers"]
     
     def store_fetch_price(self) -> dict:
         data = self.fetch('/store/v1/offers/')
