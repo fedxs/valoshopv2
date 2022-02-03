@@ -27,11 +27,11 @@ class ValorantAPI:
 
     def store_fetch_offers(self) -> dict:
         data = self.fetch("/store/v2/storefront/{user_id}".format(user_id=self.user_id))
-        return data["SkinsPanelLayout"]["SingleItemOffers"]["BonusStoreOffers"]
+        return data["SkinsPanelLayout"]["SingleItemOffers"]["BonusStore"]
     
     def store_fetch_price(self) -> dict:
         data = self.fetch('/store/v1/offers/')
-        return data['Offers']
+        return data['Offers']["BonusStoreOffers"]
 
     def my_daily_offter(self) -> None:
         skinid = self.store_fetch_offers()
