@@ -21,8 +21,12 @@ class valorant(commands.Cog):
     async def on_ready(self):
         print(f'-{self.__class__.__name__}')
     
-    @slash_command(description="Shows my daily store", guild_ids=[MY_SERVER_ID]) #ถ้าอยากให้ใช้ได้ทุกเซิฟ เอาออก guild_ids ได้ นะครับ ใช้เวลาประมาณ 1 ชม ถ้าไม่ระบุ หรือ ระบุเซิฟที่บอทอยู่ ประมาณนี้ guild_ids=[929451246493003816, 840379510704046151]
+    @slash_command(description="Shows my daily store", guild_ids=[MY_SERVER_ID])
     async def store(self, interaction, username: Option(str, "Input username"), password: Option(str, "Input password")):
+        api = ValorantAPI(interaction, username, password, region=MY_REGION, bot=self.bot)
+        await api.start()
+    @slash_command(description="Shows my night market", guild_ids=[MY_SERVER_ID])
+    async def nightmarket(self, interaction, username: Option(str, "Input username"), password: Option(str, "Input password")):
         api = ValorantAPI(interaction, username, password, region=MY_REGION, bot=self.bot)
         await api.start()
         
