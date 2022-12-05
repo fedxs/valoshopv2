@@ -6,7 +6,7 @@ import asyncio
 import requests
 import aiohttp
 
-# reference by https://github.com/iancdev
+
 
 class Auth:
     def __init__(self, username, password, message=None, interaction=None, bot=None):
